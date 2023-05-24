@@ -109,10 +109,12 @@ app.delete('/api/incomes/:id', async (req, res) => {
 app.post('/api/incomes', async (req, res) => {
     const { income_category, payment_method, income_amount, income_date, income_source_name, donor_id, description } = req.body;
 
+    const donorId = donor_id === "" ? null : donor_id;
+
     try {
         // Execute a query to add a new income
         const query = 'INSERT INTO incomes (income_category, payment_method, income_amount, income_date, income_source_name, donor_id, description) VALUES ($1, $2, $3, $4, $5, $6, $7)';
-        const values = [income_category, payment_method, income_amount, income_date, income_source_name, donor_id, description];
+        const values = [income_category, payment_method, income_amount, income_date, income_source_name, donorId, description];
         await pool.query(query, values);
 
         res.sendStatus(200);
@@ -200,6 +202,59 @@ app.put('/api/expenses/:id', async (req, res) => {
     }
 });
 
+// Monthly Income View APIs
+app.get('/api/monthly-income', async (req, res) => {
+    try {
+        const query = 'SELECT * FROM monthly_income';
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching monthly income data');
+    }
+});
+
+// Monthly Expense View APIs
+app.get('/api/monthly-expense', async (req, res) => {
+    try {
+        const query = 'SELECT * FROM monthly_expense';
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching monthly income data');
+    }
+});
+
+// Monthly Donations View APIs
+app.get('/api/monthly-donations', async (req, res) => {
+    try {
+        const query = 'SELECT * FROM monthly_donations';
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching monthly income data');
+    }
+});
+
+// Donors with income and promise difference APIs
+app.get('/api/donors-with-income', async (req, res) => {
+    try {
+        // Execute a query to retrieve donors with total_actual_income and difference
+        const query = `
+            SELECT d.*, COALESCE(SUM(i.income_amount), 0) AS total_actual_income, COALESCE(d.promised_amount - SUM(i.income_amount), d.promised_amount) AS difference
+            FROM donors d
+            LEFT JOIN incomes i ON d.id = i.donor_id
+            GROUP BY d.id
+        `;
+        const result = await pool.query(query);
+        res.json(result.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving donors with income');
+    }
+});
 
 
 const port = 3000; // Define the port number
