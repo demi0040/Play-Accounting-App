@@ -13,12 +13,12 @@ const pool = new Pool({
     host: 'localhost',
     port: '5432',
     database: 'play-accounting',
-    user: 'ihsan',
+    user: 'postgres',
     password: '1234'
 });
 
 // Donors Table APIs
-app.get('/api/donors', async (req, res) => {
+app.get('/api/donors', async(req, res) => {
     try {
         // Execute a query to retrieve all donors
         const query = 'SELECT * FROM donors';
@@ -30,7 +30,7 @@ app.get('/api/donors', async (req, res) => {
     }
 });
 
-app.delete('/api/donors/:id', async (req, res) => {
+app.delete('/api/donors/:id', async(req, res) => {
     const donorId = req.params.id;
 
     try {
@@ -45,7 +45,7 @@ app.delete('/api/donors/:id', async (req, res) => {
     }
 });
 
-app.post('/api/donors', async (req, res) => {
+app.post('/api/donors', async(req, res) => {
     const { first_name, last_name, address, postcode, phone, email, donor_area, donor_group, promised_amount, promised_date } = req.body;
 
     try {
@@ -61,7 +61,7 @@ app.post('/api/donors', async (req, res) => {
     }
 });
 
-app.put('/api/donors/:id', async (req, res) => {
+app.put('/api/donors/:id', async(req, res) => {
     const donorId = req.params.id;
     const { first_name, last_name, address, postcode, phone, email, donor_area, donor_group, promised_amount, promised_date } = req.body;
 
@@ -79,7 +79,7 @@ app.put('/api/donors/:id', async (req, res) => {
 });
 
 // Income Table APIs
-app.get('/api/incomes', async (req, res) => {
+app.get('/api/incomes', async(req, res) => {
     try {
         // Execute a query to retrieve all incomes
         const query = 'SELECT * FROM incomes';
@@ -91,7 +91,7 @@ app.get('/api/incomes', async (req, res) => {
     }
 });
 
-app.delete('/api/incomes/:id', async (req, res) => {
+app.delete('/api/incomes/:id', async(req, res) => {
     const incomeId = req.params.id;
 
     try {
@@ -106,7 +106,7 @@ app.delete('/api/incomes/:id', async (req, res) => {
     }
 });
 
-app.post('/api/incomes', async (req, res) => {
+app.post('/api/incomes', async(req, res) => {
     const { income_category, payment_method, income_amount, income_date, income_source_name, donor_id, description } = req.body;
 
     const donorId = donor_id === "" ? null : donor_id;
@@ -124,7 +124,7 @@ app.post('/api/incomes', async (req, res) => {
     }
 });
 
-app.put('/api/incomes/:id', async (req, res) => {
+app.put('/api/incomes/:id', async(req, res) => {
     const incomeId = req.params.id;
     const { income_category, payment_method, income_amount, income_date, income_source_name, donor_id, description } = req.body;
 
@@ -142,7 +142,7 @@ app.put('/api/incomes/:id', async (req, res) => {
 });
 
 // Expenses Table APIs
-app.get('/api/expenses', async (req, res) => {
+app.get('/api/expenses', async(req, res) => {
     try {
         // Execute a query to retrieve all expenses
         const query = 'SELECT * FROM expenses';
@@ -154,7 +154,7 @@ app.get('/api/expenses', async (req, res) => {
     }
 });
 
-app.delete('/api/expenses/:id', async (req, res) => {
+app.delete('/api/expenses/:id', async(req, res) => {
     const expenseId = req.params.id;
 
     try {
@@ -169,7 +169,7 @@ app.delete('/api/expenses/:id', async (req, res) => {
     }
 });
 
-app.post('/api/expenses', async (req, res) => {
+app.post('/api/expenses', async(req, res) => {
     const { expense_name, payment_method, expense_category, payee_information, expense_amount, expense_date, expense_description } = req.body;
 
     try {
@@ -185,7 +185,7 @@ app.post('/api/expenses', async (req, res) => {
     }
 });
 
-app.put('/api/expenses/:id', async (req, res) => {
+app.put('/api/expenses/:id', async(req, res) => {
     const expenseId = req.params.id;
     const { expense_name, payment_method, expense_category, payee_information, expense_amount, expense_date, expense_description } = req.body;
 
@@ -203,7 +203,7 @@ app.put('/api/expenses/:id', async (req, res) => {
 });
 
 // Monthly Income View APIs
-app.get('/api/monthly-income', async (req, res) => {
+app.get('/api/monthly-income', async(req, res) => {
     try {
         const query = 'SELECT * FROM monthly_income';
         const result = await pool.query(query);
@@ -215,7 +215,7 @@ app.get('/api/monthly-income', async (req, res) => {
 });
 
 // Monthly Expense View APIs
-app.get('/api/monthly-expense', async (req, res) => {
+app.get('/api/monthly-expense', async(req, res) => {
     try {
         const query = 'SELECT * FROM monthly_expense';
         const result = await pool.query(query);
@@ -227,7 +227,7 @@ app.get('/api/monthly-expense', async (req, res) => {
 });
 
 // Monthly Donations View APIs
-app.get('/api/monthly-donations', async (req, res) => {
+app.get('/api/monthly-donations', async(req, res) => {
     try {
         const query = 'SELECT * FROM monthly_donations';
         const result = await pool.query(query);
@@ -239,7 +239,7 @@ app.get('/api/monthly-donations', async (req, res) => {
 });
 
 // Donors with income and promise difference APIs
-app.get('/api/donors-with-income', async (req, res) => {
+app.get('/api/donors-with-income', async(req, res) => {
     try {
         // Execute a query to retrieve donors with total_actual_income and difference
         const query = `
