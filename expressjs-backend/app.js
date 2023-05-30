@@ -68,7 +68,7 @@ app.put('/api/donors/:id', async(req, res) => {
     try {
         // Execute a query to update the donor with the specified ID
         const query = 'UPDATE donors SET first_name = $1, last_name = $2, address = $3, postcode = $4, phone = $5, email = $6, donor_area = $7, donor_group = $8, promised_amount = $9, promised_date = $10 WHERE id = $11';
-        const values = [first_name, last_name, address, postcode, phone, email, donor_area, donor_group, promised_amount, promised_date, id];
+        const values = [first_name, last_name, address, postcode, phone, email, donor_area, donor_group, promised_amount, promised_date, donorId];
         await pool.query(query, values);
 
         res.sendStatus(200);
